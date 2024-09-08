@@ -73,6 +73,11 @@ class FetchMakeApi extends PIDetailEvent {
   const FetchMakeApi({required this.partyId, required this.productCode});
 }
 
+class SelectMake extends PIDetailEvent {
+  final String makeId; // unique ID of the selected make
+  const SelectMake(this.makeId);
+}
+
 class FetchModelApi extends PIDetailEvent {
   final String? partyId;
   final String? productCode;
@@ -88,3 +93,15 @@ class ShowEndorsementType extends PIDetailEvent {
 
   const ShowEndorsementType({required this.piPurpose});
 }
+
+class IdvSelect extends PIDetailEvent {}
+
+class PrefixSelect extends PIDetailEvent {}
+
+class ProposalTypeSelect extends PIDetailEvent {}
+
+class PreInspectionSelect extends PIDetailEvent {}
+
+class NCBSelect extends PIDetailEvent {}
+
+class PaymentSelect extends PIDetailEvent {}

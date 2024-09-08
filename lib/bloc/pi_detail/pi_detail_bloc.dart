@@ -15,6 +15,8 @@ import 'pi_detail_state.dart';
 import '../../core/services.dart' as api;
 
 class PIDetailBloc extends Bloc<PIDetailEvent, PIDetailState> {
+  String? selectedMakeId; // Private variable to store the selected makeId
+
   PIDetailBloc() : super(PIDetailInitial()) {
     on<LoadPIDetail>((event, emit) async {
       emit(PIDetailLoading());
@@ -43,6 +45,12 @@ class PIDetailBloc extends Bloc<PIDetailEvent, PIDetailState> {
     on<Fetchgvw>(getgvw);
     on<FetchMakeApi>(getMake);
     on<FetchModelApi>(getModel);
+    on<IdvSelect>(getidv);
+    on<PrefixSelect>(getprefix);
+    on<ProposalTypeSelect>(getproposalType);
+    on<PreInspectionSelect>(getpreInspection);
+    on<NCBSelect>(getNcb);
+    on<PaymentSelect>(getpayment);
   }
 
   // Event handler for product selection
@@ -73,7 +81,7 @@ class PIDetailBloc extends Bloc<PIDetailEvent, PIDetailState> {
   }
 
   selectddvalue(dynamic event, Emitter<PIDetailState> emit) async {
-    event.controller.text = await Navigator.push(
+    final result = await Navigator.push(
       event.context,
       MaterialPageRoute(
         builder: (context) => DropDownListScreen(
@@ -82,6 +90,9 @@ class PIDetailBloc extends Bloc<PIDetailEvent, PIDetailState> {
         ),
       ),
     );
+    event.controller.text = result['value'];
+    selectedMakeId = result['code'];
+    debugPrint("gggggg $selectedMakeId");
   }
 
   getBranchDetail(FetchBranchNameApi event, Emitter<PIDetailState> emit) async {
@@ -309,6 +320,7 @@ class PIDetailBloc extends Bloc<PIDetailEvent, PIDetailState> {
   }
 
   getSeatingCapacity(FetchSeatingCapacity event, Emitter<PIDetailState> emit) {
+    emit(PIDetailLoading());
     List<Tuple2<String, String>> seatingCapacityList = [];
 
     // Hardcoded seating capacity list
@@ -323,7 +335,7 @@ class PIDetailBloc extends Bloc<PIDetailEvent, PIDetailState> {
 
   getgvw(Fetchgvw event, Emitter<PIDetailState> emit) {
     List<Tuple2<String, String>> gvwList = [];
-
+    emit(PIDetailLoading());
     // Hardcoded seating capacity list
     List<dynamic> gvwListData = ["UPTO 2500 GVW", "UPTO 7500 GVW", ">7500 GVW"];
     for (var gvw in gvwListData) {
@@ -380,13 +392,13 @@ class PIDetailBloc extends Bloc<PIDetailEvent, PIDetailState> {
 
     try {
       api.Response res = await api.ApiService().postRequest(
-        "http://novaapiuat.shriramgi.com/UATShrigenAppService2.0/ShrigenServices/PreInspectionDetails.svc/RestService/GetVehicleMakeDetails",
+        "http://novaapiuat.shriramgi.com/UATShrigenAppService2.0/ShrigenServices/PreInspectionDetails.svc/RestService/GetVehicleModelDetails",
         jsonEncode({
           "Userip": "",
           "Userpartyid": event.partyId,
           "PremiaPoductCode": event.productCode,
           "ProductCategory": "",
-          "VehicleMake": event.makeCode
+          "VehicleMake": selectedMakeId
         }),
       );
 
@@ -429,4 +441,100 @@ class PIDetailBloc extends Bloc<PIDetailEvent, PIDetailState> {
       ));
     }
   }
+
+  getidv(IdvSelect event, Emitter<PIDetailState> emit) {
+    emit(PIDetailLoading());
+    List<Tuple2<String, String>> idvList = [];
+
+    // Hardcoded seating capacity list
+    List<dynamic> idvListData = [
+      "Less than 1 Lac",
+      "Greater than or equal to 1 Lac"
+    ];
+    for (var idv in idvListData) {
+      idvList.add(Tuple2("", idv));
+    }
+
+    // Emit the loaded seating capacity state
+    emit(IdvLoaded(getList: idvList));
+  }
+}
+
+getprefix(PrefixSelect event, Emitter<PIDetailState> emit) {
+  emit(PIDetailLoading());
+  List<Tuple2<String, String>> prefixList = [];
+
+  // Hardcoded seating capacity list
+  List<dynamic> prefixListData = [
+    "Mr.",
+    "Mrs.",
+    "Miss.",
+    "M/S.",
+  ];
+  for (var prefix in prefixListData) {
+    prefixList.add(Tuple2("", prefix));
+  }
+
+  // Emit the loaded seating capacity state
+  emit(PrefixLoaded(getList: prefixList));
+}
+
+getproposalType(ProposalTypeSelect event, Emitter<PIDetailState> emit) {
+  emit(PIDetailLoading());
+  List<Tuple2<String, String>> proposalTypeList = [];
+
+  // Hardcoded seating capacity list
+  List<dynamic> proposalTypeListData = [
+    "Market Renewal",
+    "Market Renewal without previous insurance",
+    "Own Renewal"
+  ];
+  for (var proposalType in proposalTypeListData) {
+    proposalTypeList.add(Tuple2("", proposalType));
+  }
+
+  // Emit the loaded seating capacity state
+  emit(ProposalTypeLoaded(getList: proposalTypeList));
+}
+
+getpreInspection(PreInspectionSelect event, Emitter<PIDetailState> emit) {
+  emit(PIDetailLoading());
+  List<Tuple2<String, String>> preInspectionList = [];
+
+  // Hardcoded seating capacity list
+  List<dynamic> preInspectionListData = ["Recommended", "Not Recommended"];
+  for (var preInspection in preInspectionListData) {
+    preInspectionList.add(Tuple2("", preInspection));
+  }
+
+  // Emit the loaded seating capacity state
+  emit(PreInspectionLoaded(getList: preInspectionList));
+}
+
+getNcb(NCBSelect event, Emitter<PIDetailState> emit) {
+  emit(PIDetailLoading());
+  List<Tuple2<String, String>> ncbList = [];
+
+  // Hardcoded seating capacity list
+  List<dynamic> ncbListData = ["0", "20", "25", "35", "45", "50"];
+  for (var ncb in ncbListData) {
+    ncbList.add(Tuple2("", ncb));
+  }
+
+  // Emit the loaded seating capacity state
+  emit(NCBLoaded(getList: ncbList));
+}
+
+getpayment(PaymentSelect event, Emitter<PIDetailState> emit) {
+  emit(PIDetailLoading());
+  List<Tuple2<String, String>> paymentList = [];
+
+  // Hardcoded seating capacity list
+  List<dynamic> paymentListData = ["Cash", "Cheque", "DD"];
+  for (var payment in paymentListData) {
+    paymentList.add(Tuple2("", payment));
+  }
+
+  // Emit the loaded seating capacity state
+  emit(PaymentLoaded(getList: paymentList));
 }

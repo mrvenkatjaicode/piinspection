@@ -197,13 +197,15 @@ class DropDownListScreen extends StatelessWidget {
                                                             .toString() */
                                         ),
                                     onTap: () {
-                                      if(listtype == "Product"){
-
-                                      }
-                                      Navigator.pop(context,
-                                          datalist[index]!.item2 ?? "");
+                                      if (listtype == "Product") {}
+                                      Navigator.pop(context, {
+                                        'value': datalist[index]!.item2 ?? "",
+                                        'code': datalist[index]!.item1 ?? ""
+                                      });
                                       debugPrint(
                                           datalist[index]!.item2.toString());
+                                      debugPrint(
+                                          datalist[index]!.item1.toString());
                                     },
                                   ),
                                 ),

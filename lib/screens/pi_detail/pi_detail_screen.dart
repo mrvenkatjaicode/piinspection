@@ -121,7 +121,12 @@ class _PIDetailScreenState extends State<PIDetailScreen> {
                           partyId: "100000000138661",
                           productCode: state.productCode))
                     }
-                  : {};
+                  : {
+                      context.read<PIDetailBloc>().add(FetchModelApi(
+                          partyId: "100000000138661",
+                          productCode: state.productCode,
+                          makeCode: ''))
+                    };
           debugPrint(state.productCode);
         } else if (state is VehicleCategoryListLoaded) {
           context.read<PIDetailBloc>().add(ChooseDDValue(
@@ -165,13 +170,50 @@ class _PIDetailScreenState extends State<PIDetailScreen> {
               getList: state.getList,
               screenName: "Model",
               context: context));
+        } else if (state is IdvLoaded) {
+          context.read<PIDetailBloc>().add(ChooseDDValue(
+              controller: idvtextcontoller,
+              getList: state.getList,
+              screenName: "IDV",
+              context: context));
+        } else if (state is PrefixLoaded) {
+          context.read<PIDetailBloc>().add(ChooseDDValue(
+              controller: prefixtextcontoller,
+              getList: state.getList,
+              screenName: "Prefix",
+              context: context));
+        } else if (state is ProposalTypeLoaded) {
+          context.read<PIDetailBloc>().add(ChooseDDValue(
+              controller: proposaltypetextcontoller,
+              getList: state.getList,
+              screenName: "Proposal Type",
+              context: context));
+        } else if (state is PreInspectionLoaded) {
+          context.read<PIDetailBloc>().add(ChooseDDValue(
+              controller: preinspectionstatustextcontoller,
+              getList: state.getList,
+              screenName: "Pre Inspection",
+              context: context));
+        } else if (state is NCBLoaded) {
+          context.read<PIDetailBloc>().add(ChooseDDValue(
+              controller: ncbtextcontoller,
+              getList: state.getList,
+              screenName: "NCB",
+              context: context));
+        } else if (state is PaymentLoaded) {
+          context.read<PIDetailBloc>().add(ChooseDDValue(
+              controller: modeofpaymenttextcontoller,
+              getList: state.getList,
+              screenName: "Mode of Payment",
+              context: context));
         } else if (state is PIDetailShowEndorsementState) {
           debugPrint("isShowEndorsementType: ${state.isShowEndorsementType}");
           debugPrint("isShowPolicyNumber: ${state.isShowPolicyNumber}");
         }
       }, builder: (context, state) {
-        bool isShowEndorsementType = false;
-        bool isShowPolicyNumber = false;
+        // inspectionlocationtextcontoller.text = widget.place.postalCode ?? "";
+        bool? isShowEndorsementType;
+        bool isShowPolicyNumber;
 
         if (state is PIDetailShowEndorsementState) {
           isShowEndorsementType = state.isShowEndorsementType;
@@ -458,7 +500,8 @@ class _PIDetailScreenState extends State<PIDetailScreen> {
                                           ),
                                         ),
                                         DropDownPiWidget(
-                                          //  visible: ,
+                                          // visible:
+                                          //     isShowEndorsementType ?? false,
                                           controller:
                                               endoresementtypetextcontoller,
                                           labelText: "Endorsement Type",
@@ -497,6 +540,18 @@ class _PIDetailScreenState extends State<PIDetailScreen> {
                                                 ProductSelected(
                                                     producttextcontoller.text,
                                                     "model"));
+                                            // BlocProvider.of<PIDetailBloc>(
+                                            //         context)
+                                            //     .add(
+                                            //   const FetchModelApi(
+                                            //       partyId: "100000000138661",
+                                            //       productCode: "",
+                                            //       makeCode: ),
+                                            // );
+                                            // context.read<PIDetailBloc>().add(
+                                            //     ProductSelected(
+                                            //         producttextcontoller.text,
+                                            //         "model"));
                                           },
                                         ),
                                         DropDownPiWidget(
@@ -1133,8 +1188,13 @@ class _PIDetailScreenState extends State<PIDetailScreen> {
                                               TextCapitalization.characters,
                                         ),
                                         DropDownPiWidget(
+                                          controller: idvtextcontoller,
                                           labelText: "IDV Of Vehicle",
-                                          onTap: () {},
+                                          onTap: () {
+                                            context
+                                                .read<PIDetailBloc>()
+                                                .add(IdvSelect());
+                                          },
                                         ),
                                         TextFieldPiWidget(
                                           ignoring: false,
@@ -1153,8 +1213,13 @@ class _PIDetailScreenState extends State<PIDetailScreen> {
                                           },
                                         ),
                                         DropDownPiWidget(
+                                          controller: prefixtextcontoller,
                                           labelText: "Prefix",
-                                          onTap: () {},
+                                          onTap: () {
+                                            context
+                                                .read<PIDetailBloc>()
+                                                .add(PrefixSelect());
+                                          },
                                         ),
                                         const TextFieldPiWidget(
                                           ignoring: false,
@@ -1173,8 +1238,13 @@ class _PIDetailScreenState extends State<PIDetailScreen> {
                                                   Icons.my_location_sharp)),
                                         ),
                                         DropDownPiWidget(
+                                          controller: proposaltypetextcontoller,
                                           labelText: "Proposal Type",
-                                          onTap: () {},
+                                          onTap: () {
+                                            context
+                                                .read<PIDetailBloc>()
+                                                .add(ProposalTypeSelect());
+                                          },
                                         ),
                                         const TextFieldPiWidget(
                                           ignoring: false,
@@ -1190,13 +1260,24 @@ class _PIDetailScreenState extends State<PIDetailScreen> {
                                           onChanged: (value) {},
                                         ),
                                         DropDownPiWidget(
+                                          controller:
+                                              preinspectionstatustextcontoller,
                                           visible: !widget.otherflow,
                                           labelText: "Pre-Inspection Status",
-                                          onTap: () {},
+                                          onTap: () {
+                                            context
+                                                .read<PIDetailBloc>()
+                                                .add(PreInspectionSelect());
+                                          },
                                         ),
                                         DropDownPiWidget(
+                                          controller: ncbtextcontoller,
                                           labelText: "Eligible NCB%",
-                                          onTap: () {},
+                                          onTap: () {
+                                            context
+                                                .read<PIDetailBloc>()
+                                                .add(NCBSelect());
+                                          },
                                         ),
                                         TextFieldPiWidget(
                                           visible: !widget.otherflow,
@@ -1838,8 +1919,14 @@ class _PIDetailScreenState extends State<PIDetailScreen> {
                                           inputformat: "number",
                                         ),
                                         DropDownPiWidget(
+                                          controller:
+                                              modeofpaymenttextcontoller,
                                           labelText: "Mode Of Payment",
-                                          onTap: () {},
+                                          onTap: () {
+                                            context
+                                                .read<PIDetailBloc>()
+                                                .add(PaymentSelect());
+                                          },
                                         ),
                                         TextFieldPiWidget(
                                           visible: widget.otherflow,

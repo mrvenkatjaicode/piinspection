@@ -119,6 +119,42 @@ class ModelListLoaded extends PIDetailState {
   List<Object> get props => [getList];
 }
 
+class IdvLoaded extends PIDetailState {
+  final List<Tuple2<String?, String?>?> getList;
+
+  const IdvLoaded({required this.getList});
+}
+
+class PrefixLoaded extends PIDetailState {
+  final List<Tuple2<String?, String?>?> getList;
+
+  const PrefixLoaded({required this.getList});
+}
+
+class ProposalTypeLoaded extends PIDetailState {
+  final List<Tuple2<String?, String?>?> getList;
+
+  const ProposalTypeLoaded({required this.getList});
+}
+
+class PreInspectionLoaded extends PIDetailState {
+  final List<Tuple2<String?, String?>?> getList;
+
+  const PreInspectionLoaded({required this.getList});
+}
+
+class NCBLoaded extends PIDetailState {
+  final List<Tuple2<String?, String?>?> getList;
+
+  const NCBLoaded({required this.getList});
+}
+
+class PaymentLoaded extends PIDetailState {
+  final List<Tuple2<String?, String?>?> getList;
+
+  const PaymentLoaded({required this.getList});
+}
+
 class PIDetailError extends PIDetailState {
   final String message;
 
